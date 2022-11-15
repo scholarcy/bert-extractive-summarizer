@@ -252,25 +252,31 @@ This will use the Bert-base-uncased model, which has a small representation. The
 arguments for custom and different models. This can be done through a command such as:
 
 ```
-docker build -t summary-service -f Dockerfile ./
-docker run --rm -it -p 5011:8080 summary-service:latest -model bert-large-uncased
+docker build -t bert-summary-service .
+docker run --rm -it -p 5011:8080 --env-file .env bert-summary-service:latest
 ```
 
-Other arguments can also be passed to the server. Below includes the list of available arguments.
+Arguments can also be passed to the server via the `.env` file. Available variables include.
 
-* -reduce: Determines the reduction statistic of the encoding layer (mean, median, max).
-* -hidden: Determines the hidden layer to use for embeddings (default is -2)
-* -port: Determines the port to use.
-* -host: Determines the host to use.
+* `DEFAULT_MODEL`: Default model used by the BERT classifier. Defaults to `distilbert-base-uncased`. You might wish to try `bert-large-uncased`.
+* `DEFAULT_SBERT_MODEL`: Default model used by the SBERT classifier. Defaults to `paraphrase-MiniLM-L6-v2`. 
+* `DEFAULT_ENGINE`: Default classifier: either `sbert` or `bert`.
+* `USE_COREFERENCE`: Boolean. If set, uses coreference resolution to expand pronominals. Defaults to `False`.
+* `REDUCE`: Determines the reduction statistic of the encoding layer (mean, median, max).
+* `HIDDEN`: Determines the hidden layer to use for embeddings (default is -2)
+* `PORT`: Determines the port to use. Defaults to `8080`
+* `HOST`: Determines the host to use. Defaults to `0.0.0.0`
 
 Once the service is running, you can make a summarization command at the `http://localhost:5011/summarize` endpoint. 
 This endpoint accepts a text/plain input which represents the text that you want to summarize. Parameters can also be 
 passed as request arguments. The accepted arguments are:
 
-* ratio: Ratio of sentences to summarize to from the original body. (default to 0.2)
-* num_sentences: Number of sentences to use. Overrides ratio if supplied
-* min_length: The minimum length to accept as a sentence. (default to 25)
-* max_length: The maximum length to accept as a sentence. (default to 500)
+* `engine`: Defaults to `DEFAULT_ENGINE` env var. Can be set to `sbert` or `bert`
+* `use_first`: Boolean. If set, the first sentence of the input always appears in the summary output.
+* `ratio`: Ratio of sentences to summarize to from the original body. Overrides `num_sentences` if supplied (defaults to `OUTPUT_RATIO` env var).
+* `num_sentences`: Number of sentences to use (defaults to `NUM_SENTENCES` env var).
+* `min_length`: The minimum length to accept as a sentence. (defaults to `MIN_INPUT_LENGTH` env var)
+* `max_length`: The maximum length to accept as a sentence. (defaults to `MAX_INPUT_LENGTH` env var)
 
 An example of a request is the following:
 
