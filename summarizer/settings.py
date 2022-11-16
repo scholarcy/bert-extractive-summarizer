@@ -16,11 +16,12 @@ RATE_LIMIT = os.environ.get("RATE_LIMIT", "10 per second").split(",")
 
 NUM_SENTENCES = int(os.environ.get("NUM_SENTENCES", 5))
 OUTPUT_RATIO = float(os.environ.get("OUTPUT_RATIO", 0.0))
-MIN_INPUT_LENGTH = int(os.environ.get("MIN_INPUT_LENGTH", 10))
-MAX_INPUT_LENGTH = int(os.environ.get("MAX_INPUT_LENGTH", 512))
+MIN_INPUT_LENGTH = int(os.environ.get("MIN_INPUT_LENGTH", 40))
+MAX_INPUT_LENGTH = int(os.environ.get("MAX_INPUT_LENGTH", 1024))
 USE_FIRST_SENTENCE = os.environ.get("USE_FIRST_SENTENCE", True) in {'True', 'true', 1, True}
 DEFAULT_MODEL = os.environ.get("DEFAULT_MODEL", "distilbert-base-uncased")
 DEFAULT_SBERT_MODEL = os.environ.get("DEFAULT_SBERT_MODEL", "paraphrase-MiniLM-L6-v2")
+# SBERT is 3x as fast as BERT, even when using distilbert-base-uncased. We are still evaluating accuracy, however
 DEFAULT_ENGINE = os.environ.get("DEFAULT_ENGINE", "sbert")
 USE_COREFERENCE = os.environ.get("USE_COREFERENCE") in {'True', 'true', 1, True}
 
