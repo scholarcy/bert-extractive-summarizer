@@ -166,6 +166,10 @@ def summarize_text():
                                  max_length=max_length,
                                  use_first=use_first)
 
+    client_ip_address = get_fwd_remote_address()
+    # Log usage
+    app.logger.info("IP: {}".format(client_ip_address))
+    
     return jsonify({
         'summary': summary
     })

@@ -14,7 +14,9 @@ class SentenceHandler(SentenceABC):
 
         :param language: Determines the language to use with spacy.
         """
-        nlp = language(disable=["tok2vec", "tagger", "parser", "attribute_ruler", "lemmatizer", "ner"])
+        # We only need the fast sentencizer sentence splitter for now
+        # In future, we may need the full spacy model and pipeline though
+        nlp = language()
         nlp.add_pipe("sentencizer")
         super().__init__(nlp)
 
